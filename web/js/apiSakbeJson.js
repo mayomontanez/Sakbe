@@ -58,7 +58,12 @@ function BusquedaOrigenDestino() {
         select: function (event, ui) {
             var strCoordenadas = $.parseJSON(ui.item.value);
             try {
-                EncuentraRoadJson(strCoordenadas.coordinates[1], strCoordenadas.coordinates[0], map.getScale(), false);
+                var aProj = new OpenLayers.Projection("EPSG:4326");
+                var deProj = new OpenLayers.Projection("EPSG:900913");
+                var lonLatTmp = new OpenLayers.LonLat(strCoordenadas.coordinates[0], strCoordenadas.coordinates[1]);
+                lonLatTmp.transform(aProj, deProj);
+                
+                EncuentraRoadJson(lonLatTmp.lat, lonLatTmp.lon, map.getScale(), false);
                 $(this).val(ui.item.label);
             } catch (err) {
                 alert(err.message);
@@ -137,6 +142,7 @@ function rutear()
 
 function EncuentraRoadJson(y, x, escala, onClick)
 {
+    //alert(map.getProjectionObject() +"\n"+ x +"\n"+ y);
     //se agrega, al final de la url, el parámetro &proj=MERC
     var urlJson = "http://gaia.inegi.org.mx/sakbe/wservice?make=IL&escala=" + escala + "&y=" + y + "&x=" + x + "&type=json" + "&key=SIATL&proj=MERC";
     //var urlJson = "http://gaia.inegi.org.mx/sakbe/wservice?make=IL&escala=54070.29327392578&y=21.889430203735&x=-102.27328250991&type=json&key=SIATL";
@@ -356,14 +362,14 @@ function llenaTxtDestino(nombre) {
 }
 
 function zoomRuta() {
-    /*for (var i = 0; i < vector_layer.features.length; i++) {
+    for (var i = 0; i < vector_layer.features.length; i++) {
         map.zoomToExtent([
             vector_layer.features[i].geometry.bounds.left,
             vector_layer.features[i].geometry.bounds.bottom,
             vector_layer.features[i].geometry.bounds.right,
             vector_layer.features[i].geometry.bounds.top
         ]);
-    }*/
+    }
 }
 
 function funcionesRuteo()
@@ -372,7 +378,7 @@ function funcionesRuteo()
     detalleRuta();
 }
 
-function limpiaItinerario(){
+function limpiaItinerario() {
     var $panel = $('#itinerario .list-group');
     $panel.empty();
 }

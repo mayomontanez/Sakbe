@@ -51,10 +51,10 @@ function init() {
     map = new OpenLayers.Map('map', {
         controls: [
             new OpenLayers.Control.Navigation(),
-            new OpenLayers.Control.PanZoomBar(),
+            //new OpenLayers.Control.PanZoomBar(),
             new OpenLayers.Control.LayerSwitcher({'ascending': false}),
             new OpenLayers.Control.Permalink(),
-            new OpenLayers.Control.ScaleLine(),
+            //new OpenLayers.Control.ScaleLine(),
             new OpenLayers.Control.Permalink('http://www.inegi.org.mx'),
             new OpenLayers.Control.MousePosition(),
             new OpenLayers.Control.OverviewMap(),
@@ -64,7 +64,7 @@ function init() {
             new OpenLayers.Layer.Google(
                     "Google Satellite",
                     {type: google.maps.MapTypeId.SATELLITE, numZoomLevels: 22}
-            ),
+            )/*,
             new OpenLayers.Layer.Google(
                     "Google Hybrid",
                     {type: google.maps.MapTypeId.HYBRID, numZoomLevels: 20}
@@ -76,7 +76,7 @@ function init() {
             new OpenLayers.Layer.Google(
                     "Google Streets", // the default
                     {numZoomLevels: 20}
-            )
+            )*/
         ],
         projection: new OpenLayers.Projection('EPSG:900913'),
         displayProjection: new OpenLayers.Projection("EPSG:4326"),
@@ -101,7 +101,7 @@ function init() {
             {layers: 'MapaBaseOrtofoto'},
             {isBaseLayer: 'true'});
 
-    var road = new OpenLayers.Layer.Bing({
+    /*var road = new OpenLayers.Layer.Bing({
         name: "BING Road",
         key: apiKey,
         type: "Road"
@@ -115,7 +115,7 @@ function init() {
         name: "BING Aerial",
         key: apiKey,
         type: "Aerial"
-    });
+    });*/
 
     var wms_estados = new OpenLayers.Layer.WMS("Estados",
             "http://antares.inegi.org.mx/analisis/DYNWMS/RNC_etapa4.pl?",
@@ -166,7 +166,7 @@ function init() {
         })
     });
 
-    map.addLayers([base1, base4, base5, road, hybrid, aerial]);
+    map.addLayers([base1/*, base4, base5, road, hybrid, aerial*/]);
     map.addLayers([wms_estados, wms_sesiones, wms_road, wms_hidro, wms_caminos, wms_vialidades, wms_consultas, vectors1]);
 
     map.addControl(new OpenLayers.Control.LayerSwitcher());

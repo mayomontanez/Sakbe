@@ -1,0 +1,485 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <title>SAKB&Eacute;</title>
+
+        <!-- The fav icon -->
+        <link rel="shortcut icon" href="img/inegi.jpg">
+
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="css/acordin.css"><!-- css para el acordeon -->
+
+        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+        <script src="js/bootstrap.min.js"></script>
+
+
+        <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+        <script src="http://maps.google.com/maps/api/js?v=3&sensor=false"></script>
+
+        <script src="js/ruteo.js"></script>
+        <script src="js/apiSakbeJson.js"></script>
+        <script src="js/menu.js"></script> <!-- js para la funcion del acordeon -->
+        <script src="js/Combustible.js"></script>
+        <!--<script src="js/directions.js"></script>-->
+        <style type="text/css">
+            /*body { overflow: hidden; }*/
+
+            .navbar-offset { margin-top: 50px; }
+            #map { position: absolute; top: 50px; bottom: 0px; left: 0px; right: 0px; }
+            #map .ol-zoom { font-size: 1.2em; }
+
+            .zoom-top-opened-sidebar { margin-top: 5px; }
+            .zoom-top-collapsed { margin-top: 45px; }
+
+            .mini-submenu{
+                display:none;  
+                background-color: rgba(255, 255, 255, 0.46);
+                border: 1px solid rgba(0, 0, 0, 0.9);
+                border-radius: 4px;
+                padding: 9px;  
+                /*position: relative;*/
+                width: 42px;
+                text-align: center;
+            }
+
+            .mini-submenu-left {
+                position: absolute;
+                top: 60px;
+                left: .5em;
+                z-index: 40;
+            }
+            .mini-submenu-right {
+                position: absolute;
+                top: 60px;
+                right: .5em;
+                z-index: 40;
+            }
+
+            #map { z-index: 35; }
+
+            .sidebar { z-index: 45; }
+
+            .main-row { position: relative; top: 0; }
+
+            .mini-submenu:hover{
+                cursor: pointer;
+            }
+
+            .slide-submenu{
+                background: rgba(0, 0, 0, 0.45);
+                display: inline-block;
+                padding: 0 8px;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+        </style>
+
+        <script type="text/javascript">
+            function funcionesRuteo()
+            {
+                multiRuteo();
+                detalleRuta();
+            }
+
+            function applyMargins() {
+                var leftToggler = $(".mini-submenu-left");
+                var rightToggler = $(".mini-submenu-right");
+                if (leftToggler.is(":visible")) {
+                    $("#map .ol-zoom")
+                            .css("margin-left", 0)
+                            .removeClass("zoom-top-opened-sidebar")
+                            .addClass("zoom-top-collapsed");
+                } else {
+                    $("#map .ol-zoom")
+                            .css("margin-left", $(".sidebar-left").width())
+                            .removeClass("zoom-top-opened-sidebar")
+                            .removeClass("zoom-top-collapsed");
+                }
+                if (rightToggler.is(":visible")) {
+                    $("#map .ol-rotate")
+                            .css("margin-right", 0)
+                            .removeClass("zoom-top-opened-sidebar")
+                            .addClass("zoom-top-collapsed");
+                } else {
+                    $("#map .ol-rotate")
+                            .css("margin-right", $(".sidebar-right").width())
+                            .removeClass("zoom-top-opened-sidebar")
+                            .removeClass("zoom-top-collapsed");
+                }
+            }
+
+            function isConstrained() {
+                return $("div.mid").width() == $(window).width();
+            }
+
+            function applyInitialUIState() {
+                if (isConstrained()) {
+                    $(".sidebar-left .sidebar-body").fadeOut('slide');
+                    $(".sidebar-right .sidebar-body").fadeOut('slide');
+                    $('.mini-submenu-left').fadeIn();
+                    $('.mini-submenu-right').fadeIn();
+                }
+            }
+
+            $(function () {
+                $('.sidebar-left .slide-submenu').on('click', function () {
+                    var thisEl = $(this);
+                    thisEl.closest('.sidebar-body').fadeOut('slide', function () {
+                        $('.mini-submenu-left').fadeIn();
+                        applyMargins();
+                    });
+                });
+
+                $('.mini-submenu-left').on('click', function () {
+                    var thisEl = $(this);
+                    $('.sidebar-left .sidebar-body').toggle('slide');
+                    thisEl.hide();
+                    applyMargins();
+                });
+
+                $('.sidebar-right .slide-submenu').on('click', function () {
+                    var thisEl = $(this);
+                    thisEl.closest('.sidebar-body').fadeOut('slide', function () {
+                        $('.mini-submenu-right').fadeIn();
+                        applyMargins();
+                    });
+                });
+
+                $('.mini-submenu-right').on('click', function () {
+                    var thisEl = $(this);
+                    $('.sidebar-right .sidebar-body').toggle('slide');
+                    thisEl.hide();
+                    applyMargins();
+                });
+
+
+
+                //    $(window).on("resize", applyMargins);
+
+                /*    var map = new ol.Map({
+                 target: "map",
+                 layers: [
+                 new ol.layer.Tile({
+                 source: new ol.source.OSM()
+                 })
+                 ],
+                 view: new ol.View({
+                 center: [0, 0],
+                 zoom: 2
+                 })
+                 });*/
+                //applyInitialUIState();
+                //applyMargins();
+            });
+        </script>
+    </head>
+    <body onload="init()">
+        <div class="container">
+            <nav class="navbar navbar-fixed-top navbar-default" role="navigation">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <!--  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                              <span class="sr-only">Toggle navigation</span>
+                              <span class="icon-bar">sadad</span>
+                              <span class="icon-bar">asdad</span>
+                              <span class="icon-bar">adada</span>
+                          </button>
+                        -->
+
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li class="active"><a href="#">Link</a></li>
+                            <li><a href="#">Link</a></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Action</a></li>
+                                    <li><a href="#">Another action</a></li>
+                                    <li><a href="#">Something else here</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#">Separated link</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#">One more separated link</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <form class="navbar-form navbar-left" role="search">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search">
+                            </div>
+                            <button type="submit" class="btn btn-default">Submit</button>
+                        </form>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="#">Link</a></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Action</a></li>
+                                    <li><a href="#">Another action</a></li>
+                                    <li><a href="#">Something else here</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#">Separated link</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div><!-- /.navbar-collapse -->
+                </div><!-- /.container-fluid -->
+            </nav>
+        </div>
+
+        <div class="navbar-offset"></div>
+        <!--MAPA-->
+        <div id="map"> </div>
+        <div class="row main-row">
+            <div class="col-sm-4 col-md-3 sidebar sidebar-left pull-left">
+                <div class="panel-group sidebar-body" id="accordion-left">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#layers">
+                                    <i class="fa fa-list-alt"></i>
+                                    Layers
+                                </a>
+                                <span class="pull-right slide-submenu">
+                                    <i class="fa fa-chevron-left"></i>
+                                </span>
+                            </h4>
+                        </div>
+                        <div id="layers" class="panel-collapse collapse in">
+                            <div class="panel-body list-group">
+                                <div id="relative">
+
+                                    <div id="divBusqueda">
+
+                                        <table id="tablaSakbe" class="order-list" border="1">
+                                            <thead>
+                                                <tr>
+                                                    <td colspan="2"><b>SAKB&Eacute; Sistema de Ruteo de M&eacute;xico</b></td>
+                                                    <td rowspan="5"><input type=image src="img/addrow.jpg" width="25" height="20" id="addrow" /></td>
+                                                </tr>
+                                            </thead> 
+                                            <tbody>
+                                                <tr class="txtDestino">
+                                                    <td>
+                                                        <input type=image src="img/markers.jpg" width="25" height="20"/>
+                                                        <input type="text"  name="ordest" class="txtBusqueda" />
+                                                    </td>
+                                                    <td>
+
+                                                        <input type=image src="img/arrowsUp.jpg" width="25" height="20"  class="up"/>
+                                                        <input type=image src="img/arrowsDown.jpg" width="25" height="20" class="down"  />
+
+                                                    </td>
+
+                                                </tr>
+                                                <tr class="txtDestino">
+
+                                                    <td>
+                                                        <input type=image src="img/markers.jpg" width="25" height="20"  />
+                                                        <input type="text"  name="ordestino" class="txtBusqueda" />
+
+
+                                                    </td>
+                                                    <td>
+                                                        <input type=image src="img/arrowsUp.jpg" width="25" height="20"  class="up"/>
+                                                        <input type=image src="img/arrowsDown.jpg" width="25" height="20" class="down"  />
+                                                    </td>
+
+                                                </tr>
+                                            </tbody>
+
+                                        </table>
+
+                                    </div> 
+
+                                    <p align="center">
+                                        <a href="#" class="myButton" id="btnRuta" onclick="funcionesRuteo()">Ruta SAKB&Eacute;</a>
+                                        <input class="myButton" type="button" id ="limpiaRuta" name="limpiaRuta"   value="Limpiar ruta" >
+                                    </p>
+
+                                    <h3>Tipo de Ruta</h3> 
+                                    <select id = "tp" class="my-select" onchange="funcionesRuteo();">
+                                        <option value="0" data-img-src="carros/varias/libre.png">Ruta Libre</option>
+                                        <option value="1" data-img-src="carros/varias/couta1.png">Cuota</option>
+                                        <option value="2" data-img-src="carros/varias/libre.png">Ruta sugerida</option>
+                                    </select>
+                                    <script>
+
+                                    </script>
+                                    <h3>Tipo de Veh&iacute;culo</h3>
+
+                                    <div class="cc-selector">
+                                        <input id="carro" type="radio" name="credit-card" value="carro" onclick="valcarro()" />
+                                        <label class="drinkcard-cc carro" for="carro"></label>
+                                        <input id="moto" type="radio" name="credit-card" value="moto" onclick="valmoto()"/>
+                                        <label class="drinkcard-cc moto" for="moto"></label>
+                                        <input id="bus" type="radio" name="credit-card" value="bus" onclick="valbus()"/>
+                                        <label class="drinkcard-cc bus" for="bus"></label>
+                                        <input id="trailer" type="radio" name="credit-card" value="trailer" onclick="valtrailer()" />
+                                        <label class="drinkcard-cc trailer" for="trailer"></label>
+                                    </div>
+
+                                    <select class="my-select" id = "veh" onchange="funcionesRuteo();">
+                                        <option value="0" data-img-src="carros/moto/moto4.png" id="moto1" >Motocicleta</option>
+                                        <option value="1" data-img-src="carros/carro/carro2.png" selected="selected" id="carro1">Automovil</option>
+                                        <option value="2" data-img-src="carros/autobus/camion5.png" id="bus1">Autobus 2 Ejes</option>
+                                        <option value="3" data-img-src="carros/autobus/camion6.png">Autobus 3 Ejes</option>
+                                        <option value="4" data-img-src="carros/autobus/camion3.png">Autobus 4 Ejes</option>
+                                        <option value="5" data-img-src="carros/trailer/trailer5.png" id="trailer1">Camion 2 Ejes</option>
+                                        <option value="6" data-img-src="carros/trailer/trailer2.png">Camion 3 Ejes</option>
+                                        <option value="7" data-img-src="carros/trailer/trailer4.png">Camion 4 Ejes</option>
+                                        <option value="8" data-img-src="carros/trailer/trailer5.png">Camion 5 Ejes</option>
+                                        <option value="9" data-img-src="carros/trailer/trailer2.png">Camion 6 Ejes</option>
+                                        <option value="10" data-img-src="carros/trailer/trailer4.png">Camion 7 Ejes</option>
+                                        <option value="11" data-img-src="carros/trailer/trailer5.png">Camion 8 Ejes</option>
+                                        <option value="12" data-img-src="carros/trailer/trailer2.png">Camion 9 Ejes</option>
+                                    </select>
+
+                                    <h3>Ejes excedentes </h3>
+                                    <select id ="ee" class="my-select" onchange="funcionesRuteo();">
+                                        <option value="0" data-img-src="img/carro1.png">Sin ejes excedentes</option>
+                                        <option value="1">1 Eje </option>
+                                        <option value="2">2 Ejes</option>
+                                        <option value="3">3 Ejes</option>
+                                        <option value="4">4 Ejes</option>
+                                        <option value="5">5 Ejes</option>
+                                    </select>
+                                    <br>
+                                    <h3>Rendimiento<img src="carros/varias/kmh2.png"> </h3>
+                                    <input id="ren" value="16" onkeyup="funcionesRuteo();"> km/lt.
+                                    <h3>Combustible</h3>
+                                    <div id="tabSakbe1"></div>
+                                </div>
+                                <!--   <a href="#" class="list-group-item">
+                                    <i class="fa fa-globe"></i> Open Street Map
+                                </a>
+                                <a href="#" class="list-group-item">
+                                    <i class="fa fa-globe"></i> Bing
+                                </a>
+                                <a href="#" class="list-group-item">
+                                    <i class="fa fa-globe"></i> WMS
+                                </a>
+                                -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#properties">
+                                    <i class="fa fa-list-alt"></i>
+                                    Estadisticas
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="properties" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <div id="relative">    
+                                    <div class="accordion-container"> <!-- div para el acordeon -->
+                                        <a href="#" class="accordion-titulo">Estadisticas<span class="toggle-icon"></span></a>
+                                        <div class="accordion-content">
+                                            <div id="est"></div>	
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div id="relative">
+                                    <div class="accordion-container"><!-- div para el acordeon -->
+                                        <a href="#" class="accordion-titulo">Itinerario<span class="toggle-icon"></span></a>
+                                        <div class="accordion-content">
+                                            <div id="detalles"></div>	
+                                        </div>	
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#itinerario">
+                                    <i class="fa fa-list-alt"></i>
+                                    Layers
+                                </a>
+                                <span class="pull-right slide-submenu">
+                                    <i class="fa fa-chevron-left"></i>
+                                </span>
+                            </h4>
+                        </div>
+                        <div id="itinerario" class="panel-collapse collapse in">
+                            <div class="panel-body list-group" style="height: 300px; overflow-y: scroll">
+                                <!--<a href="#" class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <span class="glyphicon glyphicon-share-alt" aria-hidden="true" style="font-size: 450%;"></span>
+                                        </div>
+                                        <div class="col-sm-9">error on line 1 at column 47: Opening and ending tag mismatch: segmento line 0 and ruta_detalle.
+                                            <div class="row">
+                                                <div class="col-sm-4"><h6><small>11.6 km</small></h6></div>
+                                                <div class="col-sm-4"><h6><small>0 h 13 min 24 s</small></h6></div>
+                                                <div class="col-sm-4"><h6><small>Caseta: $26</small></h6></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 col-md-6 mid"></div>
+            <div class="col-sm-4 col-md-3 sidebar  s sidebar-right pull-right">
+                <div class="panel-group sidebar-body" id="accordion-right">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#taskpane">
+                                    <i class="fa fa-tasks"></i>
+                                    Task Pane
+                                </a>
+                                <span class="pull-right slide-submenu">
+                                    <i class="fa fa-chevron-right"></i>
+                                </span>
+                            </h4>
+                        </div>
+                        <div id="taskpane" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <p>
+                                    Lorem ipsum dolor sit amet, vel an wisi propriae. Sea ut graece gloriatur. Per ei quando dicant vivendum. An insolens appellantur eos, doctus convenire vis et, at solet aeterno intellegebat qui.
+                                </p>
+                                <p>
+                                    Elitr minimum inciderint qui no. Ne mea quaerendum scriptorem consequuntur. Mel ea nobis discere dignissim, aperiam patrioque ei ius. Stet laboramus eos te, his recteque mnesarchum an, quo id adipisci salutatus. Quas solet inimicus eu per. Sonet conclusionemque id vis.
+                                </p>
+                                <p>
+                                    Eam vivendo repudiandae in, ei pri sint probatus. Pri et lorem praesent periculis, dicam singulis ut sed. Omnis patrioque sit ei, vis illud impetus molestiae id. Ex viderer assentior mel, inani liber officiis pro et. Qui ut perfecto repudiandae, per no hinc tation labores.
+                                </p>
+                                <p>
+                                    Pro cu scaevola antiopam, cum id inermis salutatus. No duo liber gloriatur. Duo id vitae decore, justo consequat vix et. Sea id tale quot vitae.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="mini-submenu mini-submenu-left pull-left">
+            <i class="fa fa-list-alt"></i>
+        </div>
+        <div class="mini-submenu mini-submenu-right pull-right">
+            <i class="fa fa-tasks"></i>
+        </div>
+
+    </body>
+</html>

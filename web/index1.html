@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>SIATL</title>
+
+        <link rel="stylesheet" href="css/cabecera.css">
+
+        <link rel="stylesheet" type="text/css" href="css/style2.css">
+        <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+        <script src="http://maps.google.com/maps/api/js?v=3&sensor=false"></script>
+        <script src="http://james.padolsey.com/p/Sonic/repo/src/sonic.js"></script>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+        <!--Links Mario-->
+        <script src="js/ruteo.js"></script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+     
+        <script src="js/apiSakbeJson.js"></script>
+        <script src="js/Combustible.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/styleradiobuttons.css">
+        <link rel="stylesheet" type="text/css" href="css/styleradiobuttons2.css">
+
+        <!--pruebas de lista -->
+        <link rel="stylesheet" type="text/css" href="css/chosen.css">
+        <link rel="stylesheet" type="text/css" href="css/ImageSelect.css">
+
+        <!--<script src="js/jquery-1.11.0.min.js"></script>-->
+        <script src="js/chosen.jquery.js"></script>
+        <script src="js/ImageSelect.jquery.js"></script>
+
+
+
+        <link rel="stylesheet" href="css/acordin.css"><!-- css para el acordeon -->
+        <script src="js/menu.js"></script> <!-- js para la funcion del acordeon -->
+        <!--Bootstrap
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+        ---->        
+
+       
+        <script type="text/javascript">
+           function funcionesRuteo()
+            {
+                multiRuteo();
+                detalleRuta();
+            }
+        </script>
+    </head>
+
+    <body onload="init()">
+
+        <div id="map"></div>
+
+        <header id="main-header">
+
+            <a id="logo-header" href="#">
+                <img src="carros/varias/Sakbe1.png" id="imgC"/><span class="site-name">F</span>		
+            </a> <!-- / #logo-header -->
+            <nav>
+                <img src="carros/varias/logoINEGI.png" id="imgSakbe"/>
+                <ul>
+                    <li><a href="#">Inicio</a></li>
+                    <li><a href="#">Acerca de</a></li>
+                    <li><a href="#">Contacto</a></li>
+                </ul>
+            </nav><!-- / nav -->
+        </header><!-- / #main-header -->  
+
+        <div id="relative">
+
+            <div id="divBusqueda">
+
+                <table id="tablaSakbe" class="order-list" border="1">
+                    <thead>
+                        <tr>
+                            <td colspan="2"><b>SAKB&Eacute; Sistema de Ruteo de M&eacute;xico</b></td>
+                            <td rowspan="5"><input type=image src="img/addrow.jpg" width="25" height="20" id="addrow" /></td>
+                        </tr>
+                    </thead> 
+                    <tbody>
+                        <tr class="txtDestino">
+                            <td>
+                                <input type=image src="img/markers.jpg" width="25" height="20"/>
+                                <input type="text"  name="ordest" class="txtBusqueda" />
+                            </td>
+                            <td>
+
+                                <input type=image src="img/arrowsUp.jpg" width="25" height="20"  class="up"/>
+                                <input type=image src="img/arrowsDown.jpg" width="25" height="20" class="down"  />
+
+                            </td>
+
+                        </tr>
+                        <tr class="txtDestino">
+
+                            <td>
+                                <input type=image src="img/markers.jpg" width="25" height="20"  />
+                                <input type="text"  name="ordestino" class="txtBusqueda" />
+
+
+                            </td>
+                            <td>
+                                <input type=image src="img/arrowsUp.jpg" width="25" height="20"  class="up"/>
+                                <input type=image src="img/arrowsDown.jpg" width="25" height="20" class="down"  />
+                            </td>
+
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </div> 
+
+            <p align="center">
+                <a href="#" class="myButton" id="btnRuta" onclick="funcionesRuteo()">Ruta SAKB&Eacute;</a>
+                <input class="myButton" type="button" id ="limpiaRuta" name="limpiaRuta"   value="Limpiar ruta" >
+            </p>
+
+            <h3>Tipo de Ruta</h3> 
+            <select id = "tp" class="my-select" onchange="funcionesRuteo();">
+                <option value="0" data-img-src="carros/varias/libre.png">Ruta Libre</option>
+                <option value="1" data-img-src="carros/varias/couta1.png">Cuota</option>
+                <option value="2" data-img-src="carros/varias/libre.png">Ruta sugerida</option>
+            </select>
+            <script>
+               
+            </script>
+            <h3>Tipo de Veh&iacute;culo</h3>
+          
+                <div class="cc-selector">
+                    <input id="carro" type="radio" name="credit-card" value="carro" onclick="valcarro()" />
+                    <label class="drinkcard-cc carro" for="carro"></label>
+                    <input id="moto" type="radio" name="credit-card" value="moto" onclick="valmoto()"/>
+                    <label class="drinkcard-cc moto" for="moto"></label>
+                    <input id="bus" type="radio" name="credit-card" value="bus" onclick="valbus()"/>
+                    <label class="drinkcard-cc bus" for="bus"></label>
+                    <input id="trailer" type="radio" name="credit-card" value="trailer" onclick="valtrailer()" />
+                    <label class="drinkcard-cc trailer" for="trailer"></label>
+                </div>
+
+            <select class="my-select" id = "veh" onchange="funcionesRuteo();">
+                <option value="0" data-img-src="carros/moto/moto4.png" id="moto1" >Motocicleta</option>
+                <option value="1" data-img-src="carros/carro/carro2.png" selected="selected" id="carro1">Automovil</option>
+                <option value="2" data-img-src="carros/autobus/camion5.png" id="bus1">Autobus 2 Ejes</option>
+                <option value="3" data-img-src="carros/autobus/camion6.png">Autobus 3 Ejes</option>
+                <option value="4" data-img-src="carros/autobus/camion3.png">Autobus 4 Ejes</option>
+                <option value="5" data-img-src="carros/trailer/trailer5.png" id="trailer1">Camion 2 Ejes</option>
+                <option value="6" data-img-src="carros/trailer/trailer2.png">Camion 3 Ejes</option>
+                <option value="7" data-img-src="carros/trailer/trailer4.png">Camion 4 Ejes</option>
+                <option value="8" data-img-src="carros/trailer/trailer5.png">Camion 5 Ejes</option>
+                <option value="9" data-img-src="carros/trailer/trailer2.png">Camion 6 Ejes</option>
+                <option value="10" data-img-src="carros/trailer/trailer4.png">Camion 7 Ejes</option>
+                <option value="11" data-img-src="carros/trailer/trailer5.png">Camion 8 Ejes</option>
+                <option value="12" data-img-src="carros/trailer/trailer2.png">Camion 9 Ejes</option>
+            </select>
+           
+            <h3>Ejes excedentes </h3>
+            <select id ="ee" class="my-select" onchange="funcionesRuteo();">
+                <option value="0" data-img-src="img/carro1.png">Sin ejes excedentes</option>
+                <option value="1">1 Eje </option>
+                <option value="2">2 Ejes</option>
+                <option value="3">3 Ejes</option>
+                <option value="4">4 Ejes</option>
+                <option value="5">5 Ejes</option>
+            </select>
+            <br>
+            <h3>Rendimiento<img src="carros/varias/kmh2.png"> </h3>
+            <input id="ren" value="16" onkeyup="funcionesRuteo();"> km/lt.
+            <h3>Combustible</h3>
+            <div id="tabSakbe1"></div>
+        </div>
+        <br>
+        <div id="relative">    
+            <div class="accordion-container"> <!-- div para el acordeon -->
+                <a href="#" class="accordion-titulo">Estadisticas<span class="toggle-icon"></span></a>
+                <div class="accordion-content">
+                    <div id="est"></div>	
+                </div>
+            </div>
+        </div>
+        <br>
+        <div id="relative">
+            <div class="accordion-container"><!-- div para el acordeon -->
+                <a href="#" class="accordion-titulo">Itinerario<span class="toggle-icon"></span></a>
+                <div class="accordion-content">
+                    <div id="detalles"></div>	
+                </div>	
+            </div>
+        </div>
+        <br>
+    </body>
+</html>

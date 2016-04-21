@@ -21,165 +21,17 @@
 
 
         <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
-        <script src="http://maps.google.com/maps/api/js?v=3&sensor=false"></script>
+        <!--<script src="http://maps.google.com/maps/api/js?v=3&sensor=false"></script>--><!--original-->
+        <script src="http://maps.google.com/maps/api/js?v=3&amp;sensor=false"></script><!--emmanuel-->
 
+        <script src="js/maps.js"></script>
         <script src="js/ruteo.js"></script>
         <script src="js/apiSakbeJson.js"></script>
         <script src="js/menu.js"></script> <!-- js para la funcion del acordeon -->
         <script src="js/Combustible.js"></script>
         <!--<script src="js/directions.js"></script>-->
-        <style type="text/css">
-            /*body { overflow: hidden; }*/
-
-            .navbar-offset { margin-top: 50px; }
-            #map { position: absolute; top: 50px; bottom: 0px; left: 0px; right: 0px; }
-            #map .ol-zoom { font-size: 1.2em; }
-
-            .zoom-top-opened-sidebar { margin-top: 5px; }
-            .zoom-top-collapsed { margin-top: 45px; }
-
-            .mini-submenu{
-                display:none;  
-                background-color: rgba(255, 255, 255, 0.46);
-                border: 1px solid rgba(0, 0, 0, 0.9);
-                border-radius: 4px;
-                padding: 9px;  
-                /*position: relative;*/
-                width: 42px;
-                text-align: center;
-            }
-
-            .mini-submenu-left {
-                position: absolute;
-                top: 60px;
-                left: .5em;
-                z-index: 40;
-            }
-            .mini-submenu-right {
-                position: absolute;
-                top: 60px;
-                right: .5em;
-                z-index: 40;
-            }
-
-            #map { z-index: 35; }
-
-            .sidebar { z-index: 45; }
-
-            .main-row { position: relative; top: 0; }
-
-            .mini-submenu:hover{
-                cursor: pointer;
-            }
-
-            .slide-submenu{
-                background: rgba(0, 0, 0, 0.45);
-                display: inline-block;
-                padding: 0 8px;
-                border-radius: 4px;
-                cursor: pointer;
-            }
-
-        </style>
-
-        <script type="text/javascript">
-            function funcionesRuteo()
-            {
-                multiRuteo();
-                detalleRuta();
-            }
-
-            function applyMargins() {
-                var leftToggler = $(".mini-submenu-left");
-                var rightToggler = $(".mini-submenu-right");
-                if (leftToggler.is(":visible")) {
-                    $("#map .ol-zoom")
-                            .css("margin-left", 0)
-                            .removeClass("zoom-top-opened-sidebar")
-                            .addClass("zoom-top-collapsed");
-                } else {
-                    $("#map .ol-zoom")
-                            .css("margin-left", $(".sidebar-left").width())
-                            .removeClass("zoom-top-opened-sidebar")
-                            .removeClass("zoom-top-collapsed");
-                }
-                if (rightToggler.is(":visible")) {
-                    $("#map .ol-rotate")
-                            .css("margin-right", 0)
-                            .removeClass("zoom-top-opened-sidebar")
-                            .addClass("zoom-top-collapsed");
-                } else {
-                    $("#map .ol-rotate")
-                            .css("margin-right", $(".sidebar-right").width())
-                            .removeClass("zoom-top-opened-sidebar")
-                            .removeClass("zoom-top-collapsed");
-                }
-            }
-
-            function isConstrained() {
-                return $("div.mid").width() == $(window).width();
-            }
-
-            function applyInitialUIState() {
-                if (isConstrained()) {
-                    $(".sidebar-left .sidebar-body").fadeOut('slide');
-                    $(".sidebar-right .sidebar-body").fadeOut('slide');
-                    $('.mini-submenu-left').fadeIn();
-                    $('.mini-submenu-right').fadeIn();
-                }
-            }
-
-            $(function () {
-                $('.sidebar-left .slide-submenu').on('click', function () {
-                    var thisEl = $(this);
-                    thisEl.closest('.sidebar-body').fadeOut('slide', function () {
-                        $('.mini-submenu-left').fadeIn();
-                        applyMargins();
-                    });
-                });
-
-                $('.mini-submenu-left').on('click', function () {
-                    var thisEl = $(this);
-                    $('.sidebar-left .sidebar-body').toggle('slide');
-                    thisEl.hide();
-                    applyMargins();
-                });
-
-                $('.sidebar-right .slide-submenu').on('click', function () {
-                    var thisEl = $(this);
-                    thisEl.closest('.sidebar-body').fadeOut('slide', function () {
-                        $('.mini-submenu-right').fadeIn();
-                        applyMargins();
-                    });
-                });
-
-                $('.mini-submenu-right').on('click', function () {
-                    var thisEl = $(this);
-                    $('.sidebar-right .sidebar-body').toggle('slide');
-                    thisEl.hide();
-                    applyMargins();
-                });
-
-
-
-                //    $(window).on("resize", applyMargins);
-
-                /*    var map = new ol.Map({
-                 target: "map",
-                 layers: [
-                 new ol.layer.Tile({
-                 source: new ol.source.OSM()
-                 })
-                 ],
-                 view: new ol.View({
-                 center: [0, 0],
-                 zoom: 2
-                 })
-                 });*/
-                //applyInitialUIState();
-                //applyMargins();
-            });
-        </script>
+        <link rel="stylesheet" href="css/cssTemplate.css" />
+        <script src="js/jsTemplate.js"></script>
     </head>
     <body onload="init()">
         <div class="container">

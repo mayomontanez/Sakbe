@@ -14,6 +14,7 @@
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
         <link rel="stylesheet" href="css/acordin.css"><!-- css para el acordeon -->
 
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
         <script src="//code.jquery.com/jquery-1.10.2.js"></script>
         <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
@@ -21,7 +22,7 @@
 
 
         <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
-        <!--<script src="http://maps.google.com/maps/api/js?v=3&sensor=false"></script>--><!--original-->
+        <!--<script src="http://maps.google.com/maps/api/js?v=3&sensor=false"></script><!--original-->
         <script src="http://maps.google.com/maps/api/js?v=3&amp;sensor=false"></script><!--emmanuel-->
 
         <script src="js/maps.js"></script>
@@ -229,30 +230,23 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h4 class="panel-title">
-                                <a data-toggle="collapse" href="#properties">
+                                <a data-toggle="collapse" href="#estadisticas">
                                     <i class="fa fa-list-alt"></i>
-                                    Estadisticas
+                                    Layers
                                 </a>
+                                <span class="pull-right slide-submenu">
+                                    <i class="fa fa-chevron-left"></i>
+                                </span>
                             </h4>
                         </div>
-                        <div id="properties" class="panel-collapse collapse in">
-                            <div class="panel-body">
-                                <div id="relative">    
-                                    <div class="accordion-container"> <!-- div para el acordeon -->
-                                        <a href="#" class="accordion-titulo">Estadisticas<span class="toggle-icon"></span></a>
-                                        <div class="accordion-content">
-                                            <div id="est"></div>	
-                                        </div>
-                                    </div>
-                                </div>
-                                <br>
-                                <div id="relative">
-                                    <div class="accordion-container"><!-- div para el acordeon -->
-                                        <a href="#" class="accordion-titulo">Itinerario<span class="toggle-icon"></span></a>
-                                        <div class="accordion-content">
-                                            <div id="detalles"></div>	
-                                        </div>	
-                                    </div>
+                        <div id="estadisticas" class="panel-collapse collapse in">
+                            <div class="panel-body list-group">
+                                <div class="row">
+                                    <div class="col-md-3">.col-md-4</div>
+                                    <div class="col-md-3">.col-md-4</div>
+                                    <div class="col-md-3">.col-md-4</div>
+                                    <div class="col-md-3">.col-md-4</div>
+                                    <div class="col-md-12">.col-md-4</div>
                                 </div>
                             </div>
                         </div>

@@ -22,6 +22,7 @@ $(document).ready(function () {
         limpiaImputs();
         limpiaPuntos();
         limpiaRoads();
+        limpiaItinerario();
     });
 });
 
@@ -355,18 +356,23 @@ function llenaTxtDestino(nombre) {
 }
 
 function zoomRuta() {
-    for (var i = 0; i < vector_layer.features.length; i++) {
+    /*for (var i = 0; i < vector_layer.features.length; i++) {
         map.zoomToExtent([
             vector_layer.features[i].geometry.bounds.left,
             vector_layer.features[i].geometry.bounds.bottom,
             vector_layer.features[i].geometry.bounds.right,
             vector_layer.features[i].geometry.bounds.top
         ]);
-    }
+    }*/
 }
 
 function funcionesRuteo()
 {
     multiRuteo();
     detalleRuta();
+}
+
+function limpiaItinerario(){
+    var $panel = $('#itinerario .list-group');
+    $panel.empty();
 }

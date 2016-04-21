@@ -162,10 +162,7 @@ function init() {
                 pointRadius: 20,
                 graphicYOffset: -37,
                 graphicXOffset: -18
-            }, OpenLayers.Feature.Vector.style["default"])),
-            "select": new OpenLayers.Style({
-                externalGraphic: "img/punto_rojo.png"
-            })
+            }, OpenLayers.Feature.Vector.style["default"]))
         })
     });
 
@@ -178,9 +175,9 @@ function init() {
             [vectors1],
             {
                 clickout: true, toggle: false,
-                multiple: false, hover: false,
-                toggleKey: "ctrlKey", // ctrl key removes from selection
-                multipleKey: "shiftKey" // shift key adds to selection
+                multiple: false, hover: false
+                //toggleKey: "ctrlKey", // ctrl key removes from selection
+                //multipleKey: "shiftKey" // shift key adds to selection
             });
 
     map.addControl(selectControl);

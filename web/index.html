@@ -31,7 +31,81 @@
         <script src="js/menu.js"></script> <!-- js para la funcion del acordeon -->
         <script src="js/Combustible.js"></script>
         <!--<script src="js/directions.js"></script>-->
-       
+        <link rel="stylesheet" href="css/estadRes.css" /> <!--  css para la tabla de estaditicas-->
+       <!-- estilo de la tabla  de estadisticas -->
+        <style> 
+	
+	/* 
+	Max width before this PARTICULAR table gets nasty
+	This query will take effect for any screen smaller than 760px
+	and also iPads specifically.
+	*/
+	@media 
+	only screen and (max-width: 1627px),
+	(min-device-width: 768px) and (max-device-width: 1024px)  {
+	
+		/* Force table to not be like tables anymore */
+		table, thead, tbody, th, td, tr { 
+			display: block; 
+		}
+		
+		/* Hide table headers (but not display: none;, for accessibility) */
+		thead tr { 
+			position: absolute;
+			top: -9999px;
+			left: -9999px;
+		}
+		
+		tr { border: 1px solid #ccc; }
+		
+		td { 
+			/* Behave  like a "row" */
+			border: none;
+			border-bottom: 1px solid #eee; 
+			position: relative;
+			padding-left: 50%; 
+		}
+		
+		td:before { 
+			/* Now like a table header */
+			position: absolute;
+			/* Top/left values mimic padding */
+			top: 6px;
+			left: 6px;
+			width: 45%; 
+			padding-right: 10px; 
+			white-space: nowrap;
+		}
+		
+		/*
+		Label the data
+		*/
+		td:nth-of-type(1):before { content: "Distancia"; }
+		td:nth-of-type(2):before { content: "Tiempo"; }
+		td:nth-of-type(3):before { content: "Combustible"; }
+		td:nth-of-type(4):before { content: "Peaje"; }
+		td:nth-of-type(5):before { content: "Costo Total"; }
+		
+	}
+	
+	/* Smartphones (portrait and landscape) ----------- */
+	@media only screen
+	and (min-device-width : 320px)
+	and (max-device-width : 480px) {
+		body { 
+			padding: 0; 
+			margin: 0; 
+			width: 320px; }
+		}
+	
+	/* iPads (portrait and landscape) ----------- */
+	@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+		body { 
+			width: 495px; 
+		}
+	}
+	
+	</style>
        
     </head>
     <body onload="init()">
@@ -227,12 +301,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="panel panel-default">
+                    <div class="panel panel-default hidden" id="divestadisticas"> 
                         <div class="panel-heading">
                             <h4 class="panel-title">
                                 <a data-toggle="collapse" href="#estadisticas">
                                     <i class="fa fa-list-alt"></i>
-                                    Layers
+                                    Estadisticas
                                 </a>
                                 <span class="pull-right slide-submenu">
                                     <i class="fa fa-chevron-left"></i>
@@ -241,17 +315,40 @@
                         </div>
                         <div id="estadisticas" class="panel-collapse collapse in">
                             <div class="panel-body list-group">
-                                <div class="row">
-                                    <div class="col-md-3">.col-md-4</div>
-                                    <div class="col-md-3">.col-md-4</div>
-                                    <div class="col-md-3">.col-md-4</div>
-                                    <div class="col-md-3">.col-md-4</div>
-                                    <div class="col-md-12">.col-md-4</div>
-                                </div>
+                                <!--<div id="page-wrap">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Distancia</th>
+                                                <th>Tiempo</th>
+                                                <th>Combustible</th>
+                                                <th>Peaje</th>
+                                                <th>Costo Total</th>
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>James</td>
+                                                <td>Matman</td>
+                                                <td>Chief Sandwich Eater</td>
+                                                <td>Lettuce Green</td>
+                                                <td>Trek</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div> 
+                                <div class="accordion-container"> 
+                                    <a href="#" class="accordion-titulo">Estadisticas<span class="toggle-icon"></span></a>
+                                    <div class="accordion-content">
+                                        <div id="est"></div>	
+                                    </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
-                    <div class="panel panel-default">
+                    <div class="panel panel-default hidden" id="divItinerario" >
                         <div class="panel-heading">
                             <h4 class="panel-title">
                                 <a data-toggle="collapse" href="#itinerario">
@@ -262,8 +359,9 @@
                                     <i class="fa fa-chevron-left"></i>
                                 </span>
                             </h4>
+                            
                         </div>
-                        <div id="itinerario" class="panel-collapse collapse in">
+                        <div id="itinerario" class="panel-collapse collapse in" >
                             <div class="panel-body list-group" style="height: 300px; overflow-y: scroll">
                                 <!--<a href="#" class="list-group-item">
                                     <div class="row">

@@ -373,14 +373,7 @@ function llenaTxtDestino(nombre) {
 }
 
 function zoomRuta() {
-    for (var i = 0; i < vector_layer.features.length; i++) {
-        map.zoomToExtent([
-            vector_layer.features[i].geometry.bounds.left,
-            vector_layer.features[i].geometry.bounds.bottom,
-            vector_layer.features[i].geometry.bounds.right,
-            vector_layer.features[i].geometry.bounds.top
-        ]);
-    }
+    map.zoomToExtent(vector_layer.getDataExtent());
 }
 
 function funcionesRuteo()

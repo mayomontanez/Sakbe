@@ -28,13 +28,13 @@ and open the template in the editor.
 
 .mini-submenu-left {
     position: absolute;
-    top: 60px;
+    top: 125px; /*Lupita Menu 1*/
     left: .5em;
     z-index: 40;
 }
-.mini-submenu-right {
+.mini-submenu-right { /*Lupita Menu 2*/
     position: absolute;
-    top: 60px;
+    top: 110px;
     right: .5em;
     z-index: 40;
 }

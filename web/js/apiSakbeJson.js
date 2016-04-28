@@ -4,6 +4,20 @@ var detalles = [];
 var id_i = 0, source_i, target_i, id_f = 0, source_f, target_f;
 
 $(document).ready(function () {
+    //$(this).on('change','.baseLayersDiv input[type=radio]', function(){
+    $("#miniMap img").click(function () {
+        $(this).toggleClass("imgBaseGmaps");
+        try {
+            if (map.baseLayer.name == "Google Satellite") {
+                map.setBaseLayer(base1);
+            } else if (map.baseLayer.name == "Mapa Base INEGI") {
+                map.setBaseLayer(baseGoogle);
+            }
+        } catch (err) {
+            alert(err.message);
+        }
+    });
+    
     BusquedaOrigenDestino();
     AgregarOrigenDestino();
     calculateOrgDestino();
@@ -62,7 +76,7 @@ function BusquedaOrigenDestino() {
                 var deProj = new OpenLayers.Projection("EPSG:900913");
                 var lonLatTmp = new OpenLayers.LonLat(strCoordenadas.coordinates[0], strCoordenadas.coordinates[1]);
                 lonLatTmp.transform(aProj, deProj);
-                
+
                 EncuentraRoadJson(lonLatTmp.lat, lonLatTmp.lon, map.getScale(), false);
                 $(this).val(ui.item.label);
             } catch (err) {
@@ -253,13 +267,13 @@ function detalleRuta()
                     }
                     //alert('El tiempo total del recorrido es de: '+t.toFixed(2) +' minutos, con una distancia de : '+((k/1000).toFixed(2))+' Km y $ '+c.toFixed(2)+' pesos.');
                 })
-                        
+
                         .done(function () {
                             $("#divItinerario").removeClass("hidden"); // hacer que aparescan los paneles cuando se rutie
                             $("#divestadisticas").removeClass("hidden"); // hacer que aparescan los paneles cuando se rutie
                             var codHtml = "<div>";
                             var codHtml2 = "<div>";
-                            var codHtmlP=""; // variable para almacenar el codigo html para la tabla de estadisticas
+                            var codHtmlP = ""; // variable para almacenar el codigo html para la tabla de estadisticas
                             var t = 0, k = 0, c = 0, cd = 0;
                             $.each(detalles, function (index, value) {
                                 var codHtml = '<a href="#" class="list-group-item"><div class="row"><div class="col-sm-3">';
@@ -306,14 +320,14 @@ function detalleRuta()
                                     codHtml2 += '<div><div><b> Distancia </b><br>' + d.toFixed(2) + ' Kms</b></div><div><b> Tiempo</b><br>' + h.toFixed(0) + ' h ' + m.toFixed(0) + ' m ' + s.toFixed(0) + ' s </div><div><b> Peaje </b><br> $' + c.toFixed(2) + ' pesos</div></tr><tr><div><b> Costo combustible </b><br> $' + cc.toFixed(2) + ' pesos</div><div><b> Costo total </b><br> $' + ct.toFixed(2) + ' pesos</div></tr></div>';
                                     codHtml2 += '</div>';
                                     $('#est').html(codHtml2);
-                                    codHtmlP+='<div id="page-wrap"><table><thead><tr><th>Distancia</th><th>Tiempo</th><th>Combustible</th><th>Peaje</th><th>Costo Total</th></tr></thead><tbody><tr><td>'+  d.toFixed(2) + ' Kms</td><td>'+ h.toFixed(0) + ' h ' + m.toFixed(0) + ' m ' + s.toFixed(0) + ' s</td><td>$'+ cc.toFixed(2) + ' pesos</td><td>$'+ c.toFixed(2) + ' pesos</td><td>$'+ ct.toFixed(2) + ' pesos</td></tbody></table></div>';
+                                    codHtmlP += '<div id="page-wrap"><table><thead><tr><th>Distancia</th><th>Tiempo</th><th>Combustible</th><th>Peaje</th><th>Costo Total</th></tr></thead><tbody><tr><td>' + d.toFixed(2) + ' Kms</td><td>' + h.toFixed(0) + ' h ' + m.toFixed(0) + ' m ' + s.toFixed(0) + ' s</td><td>$' + cc.toFixed(2) + ' pesos</td><td>$' + c.toFixed(2) + ' pesos</td><td>$' + ct.toFixed(2) + ' pesos</td></tbody></table></div>';
                                     $panel2.append(codHtmlP); // codigo de la tabla estadisticas
                                 } else {
                                     m = t
                                     codHtml2 += '<div><div><b> Distancia </b><br>' + d.toFixed(2) + ' Kms</b></div><div><b> Tiempo</b><br>0 h ' + m.toFixed(0) + ' m ' + s.toFixed(0) + ' s </div><div><b> Peaje </b><br> $' + c.toFixed(2) + ' pesos</div></tr><tr><div><b> Costo combustible </b><br> $' + cc.toFixed(2) + ' pesos</div><div><b> Costo total </b><br> $' + ct.toFixed(2) + ' pesos</div></tr></div>';
                                     codHtml2 += '</div>';
                                     $('#est').html(codHtml2);
-                                    codHtmlP+='<div id="page-wrap"><table><thead><tr><th>Distancia</th><th>Tiempo</th><th>Combustible</th><th>Peaje</th><th>Costo Total</th></tr></thead><tbody><tr><td>'+d.toFixed(2)+' km</td><td>'+  h.toFixed(0) + ' h ' + m.toFixed(0) + ' m ' + s.toFixed(0) + ' s</td><td>$'+ cc.toFixed(2) + ' pesos</td><td>$'+ c.toFixed(2) + ' pesos</td><td>$'+ ct.toFixed(2) + ' pesos</td></tbody></table></div>';
+                                    codHtmlP += '<div id="page-wrap"><table><thead><tr><th>Distancia</th><th>Tiempo</th><th>Combustible</th><th>Peaje</th><th>Costo Total</th></tr></thead><tbody><tr><td>' + d.toFixed(2) + ' km</td><td>' + h.toFixed(0) + ' h ' + m.toFixed(0) + ' m ' + s.toFixed(0) + ' s</td><td>$' + cc.toFixed(2) + ' pesos</td><td>$' + c.toFixed(2) + ' pesos</td><td>$' + ct.toFixed(2) + ' pesos</td></tbody></table></div>';
                                     $panel2.append(codHtmlP); // codigo de la tabla estadisticas
                                 }
                                 d = 0;

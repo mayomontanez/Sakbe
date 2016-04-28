@@ -5,7 +5,7 @@
 
 var map;
 var apiKey = "Ar3-LKk-acyISMevsF2bqH70h21mzr_FN9AhHfi7pS26F5hMH1DmpI7PBK1VCLBk";
-var base1, base2, base3;
+var base1, base2, base3, baseGoogle;
 var wms_nubes, wms_road, wms_hidro1, wms_hidro2, wms_casetas;
 var vectors1;
 
@@ -40,6 +40,10 @@ function getPointClick(e) {
     EncuentraRoadJson(lonlat.lat, lonlat.lon, map.getScale(), true);
 }
 
+function mapBaseLayerChanged(event) {
+    //alert(event.type + " " + event.layer.name);
+}
+
 function init() {
     /*var options = {
      zoom: 9
@@ -48,6 +52,12 @@ function init() {
      , visible: false
      };
      map = new google.maps.Map(document.getElementById('map'), options);*/
+    
+    baseGoogle = new OpenLayers.Layer.Google(
+            "Google Satellite",
+            {type: google.maps.MapTypeId.SATELLITE, numZoomLevels: 22}
+    );
+    
     map = new OpenLayers.Map('map', {
         controls: [
             new OpenLayers.Control.Navigation(),
@@ -61,30 +71,35 @@ function init() {
             new OpenLayers.Control.KeyboardDefaults()
         ],
         layers: [
-            new OpenLayers.Layer.Google(
-                    "Google Satellite",
-                    {type: google.maps.MapTypeId.SATELLITE, numZoomLevels: 22}
-            )/*,
-            new OpenLayers.Layer.Google(
-                    "Google Hybrid",
-                    {type: google.maps.MapTypeId.HYBRID, numZoomLevels: 20}
-            ),
-            new OpenLayers.Layer.Google(
-                    "Google Physical",
-                    {type: google.maps.MapTypeId.TERRAIN}
-            ),
-            new OpenLayers.Layer.Google(
-                    "Google Streets", // the default
-                    {numZoomLevels: 20}
-            )*/
+            baseGoogle/*,
+             new OpenLayers.Layer.Google(
+             "Google Hybrid",
+             {type: google.maps.MapTypeId.HYBRID, numZoomLevels: 20}
+             ),
+             new OpenLayers.Layer.Google(
+             "Google Physical",
+             {type: google.maps.MapTypeId.TERRAIN}
+             ),
+             new OpenLayers.Layer.Google(
+             "Google Streets", // the default
+             {numZoomLevels: 20}
+             )*/
         ],
         projection: new OpenLayers.Projection('EPSG:900913'),
         displayProjection: new OpenLayers.Projection("EPSG:4326"),
-        numZoomLevels: 23
+        numZoomLevels: 23,
+        eventListeners: {
+            /*"moveend": mapEvent,
+            "zoomend": mapEvent,
+            "changelayer": mapLayerChanged,*/
+            "changebaselayer": mapBaseLayerChanged
+        }
     });
 
     map.addControl(new OpenLayers.Control.MousePosition());
     map.addControl(new OpenLayers.Control.LayerSwitcher());
+    map.addControl(new OpenLayers.Control.LayerSwitcher({'div':OpenLayers.Util.getElement('layerswitcher')}));
+    //
 
     base1 = new OpenLayers.Layer.WMS("Mapa Base INEGI",
             "http://gaiamapas1.inegi.org.mx/mdmCache/service/wms?",
@@ -102,20 +117,20 @@ function init() {
             {isBaseLayer: 'true'});
 
     /*var road = new OpenLayers.Layer.Bing({
-        name: "BING Road",
-        key: apiKey,
-        type: "Road"
-    });
-    var hybrid = new OpenLayers.Layer.Bing({
-        name: "BING Hybrid",
-        key: apiKey,
-        type: "AerialWithLabels"
-    });
-    var aerial = new OpenLayers.Layer.Bing({
-        name: "BING Aerial",
-        key: apiKey,
-        type: "Aerial"
-    });*/
+     name: "BING Road",
+     key: apiKey,
+     type: "Road"
+     });
+     var hybrid = new OpenLayers.Layer.Bing({
+     name: "BING Hybrid",
+     key: apiKey,
+     type: "AerialWithLabels"
+     });
+     var aerial = new OpenLayers.Layer.Bing({
+     name: "BING Aerial",
+     key: apiKey,
+     type: "Aerial"
+     });*/
 
     var wms_estados = new OpenLayers.Layer.WMS("Estados",
             "http://antares.inegi.org.mx/analisis/DYNWMS/RNC_etapa4.pl?",
@@ -176,8 +191,8 @@ function init() {
             {
                 clickout: true, toggle: false,
                 multiple: false, hover: false
-                //toggleKey: "ctrlKey", // ctrl key removes from selection
-                //multipleKey: "shiftKey" // shift key adds to selection
+                        //toggleKey: "ctrlKey", // ctrl key removes from selection
+                        //multipleKey: "shiftKey" // shift key adds to selection
             });
 
     map.addControl(selectControl);
@@ -195,8 +210,8 @@ function NoUbicacion(pos) {
 
 function IrPosicion(lat, lon) {
     map.setCenter(
-            new OpenLayers.LonLat(lat, lon).transform(new OpenLayers.Projection("EPSG:4326"), 
-            map.getProjectionObject()), 
+            new OpenLayers.LonLat(lat, lon).transform(new OpenLayers.Projection("EPSG:4326"),
+            map.getProjectionObject()),
             13
             );
     // vectors1.addFeatures(createFeatures());

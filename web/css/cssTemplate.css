@@ -7,7 +7,21 @@ and open the template in the editor.
     Created on : 21/04/2016, 11:59:16 AM
     Author     : MARIO.MONTANEZ
 */
+#miniMap {
+    position: fixed;
+    bottom: -12px;
+    right: 5px;
+    cursor: pointer;
+    z-index: 10000;
+}
 
+#miniMap .imgBaseGmaps{
+    content:url("../img/base_gmaps_75x75.png");
+}
+
+#miniMap img {
+    content:url("../img/base_inegi_75x75.png");
+}
 .navbar-offset { margin-top: 50px; }
 #map { position: absolute; top: 50px; bottom: 0px; left: 0px; right: 0px; }
 #map .ol-zoom { font-size: 1.2em; }
@@ -55,4 +69,74 @@ and open the template in the editor.
     padding: 0 8px;
     border-radius: 4px;
     cursor: pointer;
+}
+
+/* 
+            Max width before this PARTICULAR table gets nasty
+            This query will take effect for any screen smaller than 760px
+            and also iPads specifically.
+*/
+@media 
+only screen and (max-width: 1627px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+
+    /* Force table to not be like tables anymore */
+    table, thead, tbody, th, td, tr { 
+        display: block; 
+    }
+
+    /* Hide table headers (but not display: none;, for accessibility) */
+    thead tr { 
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    tr { border: 1px solid #ccc; }
+
+    td { 
+        /* Behave  like a "row" */
+        border: none;
+        border-bottom: 1px solid #eee; 
+        position: relative;
+        padding-left: 50%; 
+    }
+
+    td:before { 
+        /* Now like a table header */
+        position: absolute;
+        /* Top/left values mimic padding */
+        top: 6px;
+        left: 6px;
+        width: 45%; 
+        padding-right: 10px; 
+        white-space: nowrap;
+    }
+
+    /*
+    Label the data
+    */
+    /*  td:nth-of-type(1):before { content: "Distancia"; }
+      td:nth-of-type(2):before { content: "Tiempo"; }
+      td:nth-of-type(3):before { content: "Combustible"; }
+      td:nth-of-type(4):before { content: "Peaje"; }
+      td:nth-of-type(5):before { content: "Costo Total"; }
+    */
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+    body { 
+        padding: 0; 
+        margin: 0; 
+        width: 320px; }
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+    body { 
+        width: 495px; 
+    }
 }
